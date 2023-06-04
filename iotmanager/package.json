@@ -1,0 +1,15 @@
+{
+    "urls": [
+        [
+            "iotmanager.py",
+            "github:cubinet-code/micropython-packages/iotmanager/iotmanager.py"
+        ]
+    ],
+    "deps": [
+        [
+            "logging",
+            "latest"
+        ]
+    ],
+    "version": "0.2.3"
+}
