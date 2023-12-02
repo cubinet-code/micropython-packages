@@ -250,7 +250,7 @@ class IotManager:
             if sta_if.isconnected():
                 log.debug(f"WLAN already connected: {sta_if.ifconfig()}")
                 return sta_if
-            sta_if.config(reconnects=3)
+            sta_if.config(reconnects=-1)
             sta_if.connect(ssid, pwd)
             start = time.ticks_ms()
             while not sta_if.isconnected():
@@ -680,19 +680,11 @@ class IotManager:
         writer.write(f"<div>{msg}</div>")
         return True
 
-    async def check_wifi(self):
-        if not self.wlan_if.isconnected():
-            log.info(f"Lost WIFI connection. Reconnecting...")
-            self.wlan_if = self.connect()
-        await asyncio.sleep_ms(0)
-
     def run(self, host="0.0.0.0", port=80):
         log.info(f"Starting IOT webserver")
         # Start all tasks
         server = asyncio.start_server(self._handle, host, port)
         self.add_task(server)
-        wifi = asyncio.start_server(self.check_wifi())
-        self.add_task(wifi)
         asyncio.gather(self.tasks)
         loop = asyncio.get_event_loop()
         loop.run_forever()
